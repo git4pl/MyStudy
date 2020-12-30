@@ -1,7 +1,6 @@
 package com.pltech.study.kotlin
 
 import kotlinx.coroutines.*
-import java.lang.Thread.sleep
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.concurrent.thread
 

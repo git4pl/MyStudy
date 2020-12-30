@@ -1,4 +1,4 @@
 include ':study-kotlin'
 include ':study-java'
-include ':app'
+include ':study-android'
 rootProject.name = "MyStudy"

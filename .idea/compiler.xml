@@ -2,7 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.7">
-      <module name="MyStudy.app" target="1.8" />
+      <module name="MyStudy.study-android" target="1.8" />
       <module name="MyStudy.study-java" target="1.8" />
     </bytecodeTargetLevel>
   </component>
