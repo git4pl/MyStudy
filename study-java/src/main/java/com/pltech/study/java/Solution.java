@@ -5,25 +5,10 @@ import java.util.List;
 import java.util.Stack;
 
 /**
+ * 二叉树相关算法
  * Created by Pang Li on 2020/10/12
  */
 public class Solution {
-
-    public int removeDuplicates(int[] nums) {
-        if (nums == null || nums.length == 0) {
-            return 0;
-        }
-        int tempIndex = 0;
-        for (int i = 0; i < nums.length; i++) {
-            if (nums[tempIndex] != nums[i]) {
-                tempIndex++;
-                if (tempIndex != i) {
-                    nums[tempIndex] = nums[i];
-                }
-            }
-        }
-        return tempIndex + 1;
-    }
 
     private static class TreeNode {
         int val;
@@ -55,17 +40,16 @@ public class Solution {
         if (root == null) {
             return result;
         }
-        traverse(result, root);
+        traversePreOrder(result, root);
         return result;
     }
-
-    private void traverse(List<Integer> list, TreeNode root) {
+    private void traversePreOrder(List<Integer> list, TreeNode root) {
         if (root == null) {
             return;
         }
         list.add(root.val);
-        traverse(list, root.left);
-        traverse(list, root.right);
+        traversePreOrder(list, root.left);
+        traversePreOrder(list, root.right);
     }
 
     /**
@@ -90,6 +74,49 @@ public class Solution {
             }
         }
 
+        return result;
+    }
+
+
+    /**
+     * 递归实现中序遍历二叉树
+     *
+     * @param root 树根节点
+     * @return 节点值的中序序列
+     */
+    public List<Integer> inorderTraversal1(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        traverseInorder(result, root);
+        return result;
+    }
+    private void traverseInorder(List<Integer> result, TreeNode tree) {
+        if (tree == null) return;
+        traverseInorder(result, tree.left);
+        result.add(tree.val);
+        traverseInorder(result, tree.right);
+    }
+
+    /**
+     * 迭代方法实现中序遍历二叉树
+     *
+     * @param root 树根节点
+     * @return 节点值的中序序列
+     */
+    public List<Integer> inorderTraversal2(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        Stack<TreeNode> stack = new Stack<>();
+        while (root != null || !stack.isEmpty()) {
+            while (root != null) {
+                stack.push(root);
+                root = root.left;
+            }
+            root = stack.pop();
+            result.add(root.val);
+            root = root.right;
+        }
         return result;
     }
 
