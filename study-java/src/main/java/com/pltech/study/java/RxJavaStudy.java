@@ -1,7 +1,14 @@
 package com.pltech.study.java;
 
+import org.reactivestreams.Subscription;
+
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.FlowableOnSubscribe;
+import io.reactivex.annotations.NonNull;
 import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Action1;
@@ -131,6 +138,38 @@ public class RxJavaStudy {
                     public void onNext(Integer integer) {
                         System.out.println("get integer: " + integer + ", at time: " + System.currentTimeMillis() + ", and the thread is: " + Thread.currentThread().getName());
                         request(3);
+                    }
+                });
+    }
+
+    private void test4() {
+        Flowable.create(new FlowableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(@NonNull FlowableEmitter<Integer> emitter) throws Exception {
+
+            }
+        }, BackpressureStrategy.BUFFER)
+                .subscribeOn(io.reactivex.schedulers.Schedulers.newThread())
+                .observeOn(io.reactivex.schedulers.Schedulers.newThread())
+                .subscribe(new org.reactivestreams.Subscriber<Integer>() {
+                    @Override
+                    public void onSubscribe(Subscription s) {
+                        s.request(Long.MAX_VALUE);
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
                     }
                 });
     }
