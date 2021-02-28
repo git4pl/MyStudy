@@ -1,5 +1,7 @@
 package com.pltech.study.java;
 
+import java.util.HashMap;
+
 /**
  * 数组操作相关的LeetCode题目
  * Created by Pang Li on 2021/2/27
@@ -28,6 +30,36 @@ public class Solutions4Array {
         }
     }
 
+
+    /**
+     * 给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 的那 两个 整数，并返回它们的数组下标。
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode-cn.com/problems/two-sum
+     *
+     * 解法分析
+     * 解法一：暴力枚举
+     * 遍历数组中的每一个数 x，寻找数组中是否存在 target-x，注意寻找(target-x)时应从x所在下标后面的位置去遍历查找，所以
+     * 两层循环的条件分别是 for(int i = 0; i < nums.length-1; i++) 和 for(int j = i+1; j < nums.length; j++)
+     * 解法二：哈希表，算法实现如下
+     * 用空间换时间，创建一个哈希表，对于每一个 x，我们首先查询哈希表中是否存在 target-x，然后将 x 插入到哈希表中，即可保证不会让 x 和自己匹配
+     *
+     * @param nums 给定的整数数组
+     * @param target 目标值
+     * @return 满足和为target的数组值下标
+     */
+    public int[] twoSum(int[] nums, int target) {
+        int len = nums.length;
+        HashMap<Integer, Integer> hashMap = new HashMap<>(len - 1);
+        hashMap.put(nums[0], 0);
+        for (int i = 1; i < len; i++) {
+            int another = target - nums[i];
+            if (hashMap.containsKey(another)) {
+                return new int[]{hashMap.get(another), i};
+            }
+            hashMap.put(nums[i], i);
+        }
+        throw new IllegalArgumentException("there are no two sum numbers.");
+    }
 
     public int removeDuplicates(int[] nums) {
         if (nums == null || nums.length == 0) {
