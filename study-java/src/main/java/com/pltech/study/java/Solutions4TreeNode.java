@@ -8,7 +8,7 @@ import java.util.Stack;
  * 二叉树相关算法
  * Created by Pang Li on 2020/10/12
  */
-public class Solution {
+public class Solutions4TreeNode {
 
     private static class TreeNode {
         int val;
