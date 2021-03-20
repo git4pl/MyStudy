@@ -1,4 +1,4 @@
-package com.pltech.study.java;
+package com.pltech.study.java.treenode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,35 +6,14 @@ import java.util.Stack;
 
 /**
  * 二叉树相关算法
+ * 与二叉树关联的面试问题一般都重点考察二叉树的各种遍历，二叉树的遍历方式主要有：前序遍历、中序遍历和后续遍历，
+ * 而这些遍历方式都可以有递归实现和迭代实现。
+ * 遍历的时间复杂度均为O(n)，每个结点都只遍历一次，并且每个结点访问只需要O(1)复杂度的时间；
+ * 空间复杂度为O(h)，其中h为树的高度。有一种Morris遍历的算法，其空间复杂度为O(1)。
+ *
  * Created by Pang Li on 2020/10/12
  */
-public class Solutions4TreeNode {
-
-    /**
-     * 二叉树是指树中节点的度不大于2的有序树，所以二叉树的节点中存有值（val）、左子节点（left）和右子节点（right）。
-     * 与二叉树关联的面试问题一般都重点考察二叉树的各种遍历，二叉树的遍历方式主要有：前序遍历、中序遍历和后续遍历，
-     * 而这些遍历方式都可以有递归实现和迭代实现。
-     * 遍历的时间复杂度均为O(n)，每个结点都只遍历一次，并且每个结点访问只需要O(1)复杂度的时间；
-     * 空间复杂度为O(h)，其中h为树的高度。有一种Morris遍历的算法，其空间复杂度为O(1)。
-     */
-    private static class TreeNode {
-        int val = 0;
-        TreeNode left = null;
-        TreeNode right = null;
-
-        TreeNode() {}
-
-        TreeNode(int val) {
-            this.val = val;
-        }
-
-        TreeNode(int val, TreeNode left, TreeNode right) {
-            this.val = val;
-            this.left = left;
-            this.right = right;
-        }
-    }
-
+public class Solutions4Traversal {
 
     /* *****************************前序遍历************************************** */
 
