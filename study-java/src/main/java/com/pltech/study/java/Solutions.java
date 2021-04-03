@@ -17,7 +17,7 @@ class Solutions {
         int[] heights = {2, 1, 5, 6, 2, 3};
         //int[] heights = {1, 1};
         Solutions solution = new Solutions();
-        int res = solution.largestRectangleArea2(heights);
+        int res = solution.trap3(heights);
         System.out.println(res);
     }
 
@@ -87,5 +87,98 @@ class Solutions {
             res = Math.max(res, heights[stack.removeFirst()] * (heights.length - stack.peekFirst() - 1));
         }
         return res;
+    }
+
+
+    ///******************************************************************************************///
+
+    /**
+     * 给定一个直方图(也称柱状图)，假设有人从上面源源不断地倒水，最后直方图能存多少水量?直方图的宽度为 1。
+     * https://leetcode-cn.com/problems/volume-of-histogram-lcci/
+     * <p>
+     * 解法一：动态规划
+     * 创建两个长度为 n 的数组 leftMax 和 rightMax。对于 0 <= i < n，leftMax[i] 表示下标 i 及其左边的
+     * 位置中height 的最大高度，rightMax[i] 表示下标 i 及其右边的位置中height 的最大高度。
+     * leftMax[0]=height[0]，rightMax[n−1]=height[n−1]
+     * 当 1 ≤ i ≤ n−1 时，leftMax[i]=max(leftMax[i−1], height[i])；
+     * 当 0 ≤ i ≤ n−2 时，rightMax[i]=max(rightMax[i+1], height[i])。
+     *
+     * <p>
+     * 解法二：单调栈
+     * <p>
+     * 单调栈存储的是下标，满足从栈底到栈顶的下标对应的数组 \textit{height}height 中的元素递减.
+     * 从左到右遍历数组，遍历到下标 i 时，如果栈内至少有两个元素，记栈顶元素为 top，top 的下面一个元素是 left，
+     * 则一定有 height[left] ≥ height[top]。如果 height[i] > height[top]，则得到一个可以接雨水的区域，
+     * 该区域的宽度是 i − left − 1，高度是min(height[left], height[i]) − height[top]，
+     * 根据宽度和高度即可计算得到该区域能接的水的量。
+     * <p>
+     * 为了得到 left，需要将 top 出栈。在对 top 计算能接的水的量之后，left 变成新的 top，重复上述操作，
+     * 直到栈变为空，或者栈顶下标对应的height 中的元素大于或等于 height[i]。
+     * <p>
+     * 在对下标 i 处计算能接的水的量之后，将 i 入栈，继续遍历后面的下标，计算能接的水的量。
+     * 遍历结束之后即可得到能接的水的总量。
+     * <p>
+     * <p>
+     * 解法三：双指针
+     * 维护两个指针 left 和 right，以及两个变量 leftMax 和 rightMax，初始时 left=0,right=n−1,leftMax=0,rightMax=0。
+     * 指针 left 只会向右移动，指针 right 只会向左移动，在移动指针的过程中维护两个变量 leftMax 和rightMax 的值。
+     */
+    public int trap1(int[] height) {
+        int len = height.length;
+        if (len <= 2) return 0;
+        int[] leftMax = new int[len];
+        int[] rightMax = new int[len];
+        leftMax[0] = height[0];
+        rightMax[len - 1] = height[len - 1];
+        for (int i = 1; i < len; i++) {
+            leftMax[i] = Math.max(height[i], leftMax[i - 1]);
+        }
+        for (int j = len - 2; j >= 0; j--) {
+            rightMax[j] = Math.max(height[j], rightMax[j + 1]);
+        }
+        int result = 0;
+        for (int k = 1; k < len - 1; k++) {
+            int t = Math.min(leftMax[k - 1], rightMax[k + 1]) - height[k];
+            result += Math.max(t, 0);
+        }
+        return result;
+    }
+
+    public int trap2(int[] height) {
+        int answer = 0;
+        Deque<Integer> stack = new LinkedList<>();
+        int n = height.length;
+        for (int i = 0; i < n; ++i) {
+            while (!stack.isEmpty() && height[i] > height[stack.peek()]) {
+                int top = stack.pop();
+                if (stack.isEmpty()) {
+                    break;
+                }
+                int left = stack.peek();
+                int currWidth = i - left - 1;
+                int currHeight = Math.min(height[left], height[i]) - height[top];
+                answer += currWidth * currHeight;
+            }
+            stack.push(i);
+        }
+        return answer;
+    }
+
+    public int trap3(int[] height) {
+        int answer = 0;
+        int left = 0, right = height.length - 1;
+        int leftMax = 0, rightMax = 0;
+        while (left < right) {
+            leftMax = Math.max(leftMax, height[left]);
+            rightMax = Math.max(rightMax, height[right]);
+            if (height[left] < height[right]) {
+                answer += leftMax - height[left];
+                ++left;
+            } else {
+                answer += rightMax - height[right];
+                --right;
+            }
+        }
+        return answer;
     }
 }
