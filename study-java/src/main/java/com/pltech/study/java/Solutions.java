@@ -181,4 +181,31 @@ class Solutions {
         }
         return answer;
     }
+
+
+    ///**************************************************************************************///
+
+    /**
+     * 给定一个数组，表示不同的木板的高度，在装水的时候，你可以选择两根木板，然后装满水，在不能倾斜的情况下，
+     * 里面能装多少水，应该由较短的木板决定。请问最多能装多少水？
+     *
+     * @param A 数组
+     */
+    public int maxArea(int[] A) {
+        int answer = 0;
+        final int N = A == null ? 0 : A.length;
+        int i = 0, j = N - 1;
+        while (i < j) {
+            int width = j - i;
+            int height = Math.min(A[i], A[j]);
+            answer = Math.max(answer, width * height);
+            if (A[i] > A[j]) {
+                j--;
+            } else {
+                i++;
+            }
+        }
+
+        return answer;
+    }
 }
