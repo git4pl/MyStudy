@@ -262,4 +262,41 @@ public class Solutions4Traversal {
         }
         return result;
     }
+
+    //BFS 算法通用代码模板
+//    bfs(s) { // s表示出发点
+//        q = new queue()
+//        q.push(s), visited[s] = true // 标记s为已访问
+//        while (!q.empty()) {
+//            u = q.pop() // 拿到当前结点
+//            for next in getNext(u) { // 拿到u的后继next
+//                if (!visited[next]) { // 如果next还没有访问过
+//                    q.push(next)
+//                    visited[next] = true
+//                }
+//            }
+//        }
+//    }
+
+/** 在矩阵中某点可以斜着走，一共有8个方向，定义如下
+    int[][] dir = {
+        {0, 1},  // 右
+        {0, -1}, // 左
+        {1, 0},  // 下
+        {-1, 0}, // 上
+        {-1,-1}, // 左上
+        {-1,1},  // 右上
+        {1,-1},  // 左下
+        {1,1},   // 右下
+    };
+    for(int d = 0;d<8;d++) {
+        int nr = r + dir[d][0];
+        int nc = c + dir[d][1];
+        if (!(nr < 0 || nc < 0 || nr >= R || nc >= C)) {
+            // 处理点 (nr, nc)
+        }
+    }
+**/
+
+
 }

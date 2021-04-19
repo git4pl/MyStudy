@@ -208,4 +208,73 @@ class Solutions {
 
         return answer;
     }
+
+
+    ///**************************************************************************************///
+
+    /**
+     * 输入一个数组nums和一个正整数k，请你判断nums是否能够被平分为元素和相同的k个子集。
+     *
+     * @param nums 数组
+     * @param k    子集数
+     */
+    public boolean canPartitionKSubsets(int[] nums, int k) {
+        if (k > nums.length) return false;
+        int sum = 0;
+        for (int v :
+                nums) {
+            sum += v;
+        }
+        if (sum % k != 0) return false;
+
+        boolean[] used = new boolean[nums.length];
+        int target = sum / k;
+        return backtrack(k, 0, nums, 0, used, target);
+    }
+    /**
+     * 递归回溯将数据装入桶中
+     *
+     * @param k      桶的序号
+     * @param bucket 桶里的数据之和
+     * @param nums   待装入的数据
+     * @param start  在nums数组中待装入的数字下标
+     * @param used   标记数字是否已装入桶中
+     * @param target 一个桶里需要达到的数字和
+     * @return 是否能按条件装桶
+     */
+    private boolean backtrack(int k, int bucket, int[] nums, int start, boolean[] used, int target) {
+        if (k == 0) {
+            //因为是从第k号桶开始装的，k==0 时表示所有桶都已被装满了，而且 nums 一定全部用完了
+            return true;
+        }
+        if (bucket == target) {
+            //当前桶已被装满，递归穷举下一个桶的选择
+            //下一个桶也从 nums[0] 开始选数字
+            return backtrack(k - 1, 0, nums, 0, used, target);
+        }
+
+        //从 start 开始向后探查有效的 nums[i] 装入当前桶
+        for (int i = start; i < nums.length; i++) {
+            if (used[i]) {
+                //nums[i]已经被装入了其他的桶中
+                continue;
+            }
+            if (nums[i] + bucket > target) {
+                //当前桶装不下nums[i]
+                continue;
+            }
+            used[i] = true;
+            bucket += nums[i];
+            //递归穷举下一个数字是否可以装入当前桶
+            if (backtrack(k, bucket, nums, i + 1, used, target)) {
+                return true;
+            }
+            //下一个数字不能装入当前桶，需撤销选择
+            used[i] = false;
+            bucket -= nums[i];
+        }
+        //穷举了所有的数字，都无法装满当前桶
+        return false;
+    }
+
 }
