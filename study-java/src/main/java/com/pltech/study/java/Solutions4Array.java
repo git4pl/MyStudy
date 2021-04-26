@@ -214,4 +214,70 @@ public class Solutions4Array {
 
     //*******************************************************************************************//
 
+    /*
+    // 求最短区间的代码模板
+    int minimalRange(int[] A) {
+        final int N = A == null ? 0 : A.length;
+        // 子串的左边，采用左开右闭原则(left, i]表示一个子串
+        int left = -1;
+        // 记录最短的子串的长度
+        int ans = A.length + 1;
+        for (int i = 0; i < N; i++) {
+            // 注意 在加入A[i]之前，(left, i-1]可能不满足条件!
+            // step 1. 直接将A[i]加到区间中，形成(left, i]
+            // step 2. TODO 更新区间的状态
+            while (区间超出/满足条件) {
+                ans = Math.min(ans, i - left);
+                // step 3. 移除A[++left];
+                // step 4. TODO 更新区间的状态
+            }
+            // assert ! 区间(left, i]到这里肯定不满足条件
+        }
+        return ans;
+    }
+
+
+    // 求定长区间的代码模板
+    int fixedLength(int[] A, int windowSize) {
+        final int N = A == null ? 0 : A.length;
+        int left = -1;
+        for (int i = 0; i < N; i++) {
+            // step 1. 直接将A[i]加到区间中，形成(left, i]
+            // TODO 修改区间的状态
+            // 如果滑动窗口还太小
+            if (i - left < windowSize) {
+                continue;
+            }
+            // assert 此时(left, i]长度必然等于windowSize
+            // TODO 判断区间的状态是否满足约束条件
+            left++;
+            // step 2. 移除A[left]
+            // TODO 修改区间状态
+        }
+        return ans; // 返回最优解
+    }
+
+
+    // 求最长区间的代码模板
+    int maxLength(int[] A) {
+        int N = A.length;
+        // 区间的左指针
+        int left = -1;
+        int ans = 0;
+        for (int i = 0; i < N; i++) {
+            // assert 在加入A[i]之前，(left, i-1]是一个合法有效的区间
+            // step 1. 直接将A[i]加到区间中，形成(left, i]
+            // step 2. 将A[i]加入之后，惰性原则
+            // TODO 检查区间状态是否满足条件
+            while (check((left, i]))) {
+                ++left; // 如果不满足条件，移动左指针
+                // TODO 修改区间的状态
+            }
+            // assert 此时(left, i]必然满足条件
+            ans = max(ans, i - left);
+        }
+        return ans; // 返回最优解
+    }
+    */
+
 }
