@@ -231,6 +231,7 @@ class Solutions {
         int target = sum / k;
         return backtrack(k, 0, nums, 0, used, target);
     }
+
     /**
      * 递归回溯将数据装入桶中
      *
@@ -277,4 +278,66 @@ class Solutions {
         return false;
     }
 
+
+    int[] memo;
+    /**
+     *【零钱兑换】给定不同面额的硬币 coins 和一个总金额 amount。
+     * 编写一个函数来计算可以凑成总金额所需的最少的硬币个数。如果没有任何一种硬币组合能组成总金额，返回 -1。
+     * @param coins     可兑换的钱币
+     * @param amount    需兑换的钱数
+     * @return 兑换方案数
+     */
+    public int coinChange(int[] coins, int amount) {
+        if (coins.length == 0) {
+            return -1;
+        }
+        memo = new int[amount];
+
+        return findWay(coins, amount);
+    }
+
+    /**
+     * memo[n] 表示钱币n可以被换取的最少的硬币数，不能换取就为-1
+     * findWay函数的目的是为了找到 amount数量的零钱可以兑换的最少硬币数量，返回其值int
+     *
+     * @param coins  可兑换的钱币
+     * @param amount 需兑换的钱数
+     * @return 兑换方法数
+     */
+    private int findWay(int[] coins, int amount) {
+        if (amount < 0) return -1;
+        if (amount == 0) return 0;
+        if (memo[amount - 1] != 0) {
+            return memo[amount - 1];
+        }
+        int min = Integer.MAX_VALUE;
+        for (int coin : coins) {
+            int res = findWay(coins, amount - coin);
+            if (res > 0 && res < min) {
+                min = res + 1;
+            }
+        }
+        memo[amount - 1] = (min == Integer.MAX_VALUE ? -1 : min);
+        return memo[amount - 1];
+    }
+
+    /**
+     *【零钱兑换】给定不同面额的硬币 coins 和一个总金额 amount。
+     * 编写一个函数来计算可以凑成总金额所需的最少的硬币个数。如果没有任何一种硬币组合能组成总金额，返回 -1。
+     */
+    public int coinChange2(int[] coins, int amount) {
+        if (coins.length == 0) return -1;
+        int[] memo = new int[amount + 1];
+        memo[0] = 0;
+        for (int i = 1; i <= amount; i++) {
+            int min = Integer.MAX_VALUE;
+            for (int coin : coins) {
+                if (i - coin >= 0 && memo[i - coin] < min) {
+                    min = memo[i - coin] + 1;
+                }
+            }
+            memo[i] = min;
+        }
+        return memo[amount] == Integer.MAX_VALUE ? -1 : memo[amount];
+    }
 }
