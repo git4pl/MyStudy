@@ -3,7 +3,11 @@ package com.pltech.study.android.launch_mode
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.view.ViewTreeObserver
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.Button
 import com.wb.study.R
 
@@ -11,6 +15,18 @@ class FirstActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("pl-LAUNCH", "Activity1->onCreate()")
+        var visitGlobalLayout = false
+        val viewTreeObserver = window.decorView.viewTreeObserver
+        viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                //if (visitGlobalLayout) return
+                visitGlobalLayout = true
+                Handler(Looper.getMainLooper()).post {
+                    println("pl-LAUNCH，首帧")
+                    //viewTreeObserver.removeOnGlobalLayoutListener(this)
+                }
+            }
+        })
         setContentView(R.layout.activity_first)
         findViewById<Button>(R.id.btn_start_secActivity).setOnClickListener {
             startActivity(

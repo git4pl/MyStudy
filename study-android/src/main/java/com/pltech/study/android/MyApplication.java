@@ -5,13 +5,16 @@ import android.app.Instrumentation;
 import android.content.Context;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class MyApplication extends Application {
 
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        hookActivityThreadInstrumentation();
+        //hookActivityThreadInstrumentation();
+        hookInstrumentation();
     }
 
     private void hookActivityThreadInstrumentation() {
@@ -31,6 +34,26 @@ public class MyApplication extends Application {
             //将sCurrentActivityThread中成员变量mInstrumentation替换成代理类InstrumentationProxy
             instrumentationField.set(activityThread, proxy);
         } catch (NoSuchFieldException | IllegalAccessException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void hookInstrumentation() {
+        try {
+            Class<?> activityThreadClazz = Class.forName("android.app.ActivityThread");
+            Method method = activityThreadClazz.getDeclaredMethod("currentActivityThread");
+            method.setAccessible(true);
+            Object activityThreadObj = method.invoke(null);
+
+            Field fieldInstrumentation = activityThreadClazz.getDeclaredField("mInstrumentation");
+            fieldInstrumentation.setAccessible(true);
+            Instrumentation instrumentation = (Instrumentation) fieldInstrumentation.get(activityThreadObj);
+
+            InstrumentationProxy proxy = new InstrumentationProxy(instrumentation);
+            fieldInstrumentation.set(activityThreadObj, proxy);
+        } catch (ClassNotFoundException | NoSuchMethodException
+                | IllegalAccessException | InvocationTargetException
+                | NoSuchFieldException e) {
             e.printStackTrace();
         }
     }
