@@ -8,7 +8,8 @@ public class QuickSort {
     public static void main(String[] args) {
         QuickSort quickSort = new QuickSort();
         int[] arr = new int[]{3, 1, 9, 4, 6, 2, 0, 5, 8, 7};
-        System.out.println("after quickSort is: " + Arrays.toString(quickSort.quickSort_(arr, 0, arr.length - 1)));
+        //System.out.println("after quickSort is: " + Arrays.toString(quickSort.quickSort_(arr, 0, arr.length - 1)));
+        System.out.println("divide the array to odd and even : " + Arrays.toString(quickSort.partitionNums(arr)));
     }
 
     /**
@@ -95,5 +96,37 @@ public class QuickSort {
             }
         }
         return arr;
+    }
+
+    /**
+     * 给定一个非负整数数组 A，返回一个数组，在该数组中， A 的所有奇数元素之后跟着所有偶数元素。
+     * https://leetcode-cn.com/problems/sort-array-by-parity/
+     * @param arr 数组
+     */
+    public int[] partitionNums(int[] arr) {
+        if (arr == null) {
+            return null;
+        }
+        int tempEven, tempOdd;
+        int left = 0;
+        int right = arr.length - 1;
+        while (left < right) {
+            while (left < right && !isEven(arr[left])) {
+                left++;
+            }
+            tempEven = arr[left];
+            while (left < right && isEven(arr[right])) {
+                right--;
+            }
+            tempOdd = arr[right];
+            arr[left] = tempOdd;
+            arr[right] = tempEven;
+        }
+
+        return arr;
+    }
+
+    private boolean isEven(int num) {
+        return num % 2 == 0;
     }
 }
