@@ -4,8 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.1" />
-        <entry key="study-android/src/main/res/layout/activity_first.xml" value="0.28229166666666666" />
-        <entry key="study-android/src/main/res/layout/activity_main.xml" value="0.28229166666666666" />
+        <entry key="study-android/src/main/res/layout/activity_first.xml" value="0.19384057971014493" />
+        <entry key="study-android/src/main/res/layout/activity_main.xml" value="0.15070921985815602" />
         <entry key="study-android/src/main/res/layout/activity_main_o.xml" value="0.5" />
         <entry key="study-android/src/main/res/layout/activity_second.xml" value="0.2682291666666667" />
         <entry key="study-android/src/main/res/layout/activity_stub.xml" value="0.28229166666666666" />
@@ -15,7 +15,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
