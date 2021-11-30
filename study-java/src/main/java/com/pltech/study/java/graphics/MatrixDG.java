@@ -173,6 +173,7 @@ public class MatrixDG {
             }
         }
 
+        ArrayList<Integer> deletedVertex = new ArrayList<>();
         Stack<Integer> stack = new Stack<>();//用栈保存未遍历完的行
         if (number != numVertexes) {
             System.out.println("\n最后存在入度为1的结点，这个有向图是有回路的:");
@@ -200,6 +201,8 @@ public class MatrixDG {
                             path = sb.toString();
                             paths.add(path);
                             graph[i][j] = 0; //断开一条边，破环一个环
+                            deletedVertex.add(i);
+                            deletedVertex.add(j);
                             sb.delete(0, sb.length());
                             times++;
                             if (times == inDegrees[j]) {
@@ -232,6 +235,10 @@ public class MatrixDG {
                 nonZero.poll();
             }
 
+            //恢复断开的依赖关系
+            for (int i = 0; i < deletedVertex.size() >> 1; i++) {
+                graph[deletedVertex.get(i)][deletedVertex.get(i+1)] = 1;
+            }
             for (String path : paths) {
                 System.out.println(path);
             }
