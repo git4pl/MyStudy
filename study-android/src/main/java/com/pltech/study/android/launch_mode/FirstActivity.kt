@@ -1,11 +1,15 @@
 package com.pltech.study.android.launch_mode
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Html
+import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.widget.Button
+import android.widget.TextView
 import androidx.work.*
 import com.pltech.study.android.jetpack.PeriodicWork
 import com.pltech.study.android.jetpack.SimpleWork
@@ -36,6 +40,23 @@ class FirstActivity : AppCompatActivity() {
         }
         val taskId = taskId
         Log.d("pl-LAUNCH", "FirstActivity 所在任务栈id：$taskId")
+
+        //将<strong>标签放在<a>标签之内时会出现在某些机型上解析不出第二个链接配置的颜色的问题
+        //这里将<strong>标签放到<a>标签外面，解决该问题
+        val sb = ("我们依据相关法律制定了"
+                + "<strong><font color='#FF552E'><a href=\"https://www.baidu.com\">《使用协议》</a></font></strong>和"
+                + "<strong><font color='#FF552E'><a href=\"https://www.baidu.com\">《隐私政策》</a></font></strong>"
+                + "，请您在点击同意之前仔细阅读并充分理解相关条款，" + "<font color='#333333'><strong>其中重点条款已经加粗或划线的方式向您重点提示，方便您了解自己的权利。</strong></font>"
+                )
+        val textView = findViewById<TextView>(R.id.tv_content)
+        textView.text = sb
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            textView.text =
+                Html.fromHtml(sb, Html.FROM_HTML_MODE_COMPACT)
+        } else {
+            textView.text = Html.fromHtml(sb)
+        }
+        textView.movementMethod = LinkMovementMethod.getInstance()
     }
 
     private fun testWorkManager() {
