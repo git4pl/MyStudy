@@ -279,6 +279,8 @@ class Solutions {
     }
 
 
+    ///**************************************************************************************///
+
     int[] memo;
     /**
      *【零钱兑换】给定不同面额的硬币 coins 和一个总金额 amount。
@@ -339,5 +341,63 @@ class Solutions {
             memo[i] = min;
         }
         return memo[amount] == Integer.MAX_VALUE ? -1 : memo[amount];
+    }
+
+
+    ///**************************************************************************************///
+
+    /**
+     * https://leetcode-cn.com/problems/palindromic-substrings/
+     * 给你一个字符串 s ，请你统计并返回这个字符串中 回文子串 的数目。
+     */
+    public int countSubstrings(String s) {
+        if (s == null) return 0;
+        int n = s.length(), ans = 0;
+        for (int i = 0; i < 2 * n - 1; i++) {
+            int left = i / 2;
+            int right = i / 2 + i % 2;
+            while (left >= 0 && right < n && s.charAt(left) == s.charAt(right)) {
+                --left;
+                ++right;
+                ++ans;
+            }
+        }
+        return ans;
+    }
+    public int countSubstrings1(String s) {
+        if (s == null) return 0;
+        int n = s.length(), ans = 0;
+        //便利回文中心点
+        for (int i = 0; i < n; i++) {
+            //j=0表示有一个中心点；j=1表示有两个中心点
+            for (int j = 0; j <= 1; j++) {
+                int left = i;
+                int right = i + j;
+                while (left >= 0 && right < n && s.charAt(left--) == s.charAt(right++)) {
+                    ans++;
+                }
+            }
+        }
+
+        return ans;
+    }
+
+    public int countSubstrings2(String s) {
+        int ans = 0;
+        boolean[][] dp = new boolean[s.length()][s.length()];
+        for (int i = s.length() - 1; i >= 0; i--) {
+            for (int j = i; j < s.length(); j++) {
+                if (s.charAt(i) == s.charAt(j)) {
+                    if (j - i <= 1) {
+                        dp[i][j] = true;
+                        ans++;
+                    } else if (dp[i + 1][j - 1]) {
+                        dp[i][j] = true;
+                        ans++;
+                    }
+                }
+            }
+        }
+        return ans;
     }
 }
