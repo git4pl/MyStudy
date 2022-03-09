@@ -1,7 +1,9 @@
 package com.pltech.study.java.treenode;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Stack;
 
 /**
@@ -10,7 +12,7 @@ import java.util.Stack;
  * 而这些遍历方式都可以有递归实现和迭代实现。
  * 遍历的时间复杂度均为O(n)，每个结点都只遍历一次，并且每个结点访问只需要O(1)复杂度的时间；
  * 空间复杂度为O(h)，其中h为树的高度。有一种Morris遍历的算法，其空间复杂度为O(1)。
- *
+ * <p>
  * Created by Pang Li on 2020/10/12
  */
 public class Solutions4Traversal {
@@ -31,6 +33,7 @@ public class Solutions4Traversal {
         preorder(result, root);
         return result;
     }
+
     private void preorder(List<Integer> list, TreeNode root) {
         if (root == null) {
             return;
@@ -64,6 +67,7 @@ public class Solutions4Traversal {
 
         return result;
     }
+
     /**
      * 迭代方法实现先序遍历二叉树
      */
@@ -97,6 +101,7 @@ public class Solutions4Traversal {
         inorder(result, root);
         return result;
     }
+
     private void inorder(List<Integer> result, TreeNode tree) {
         if (tree == null) return;
         inorder(result, tree.left);
@@ -142,6 +147,7 @@ public class Solutions4Traversal {
         postOrder(root, result);
         return result;
     }
+
     private void postOrder(TreeNode root, List<Integer> ans) {
         if (root != null) {
             // 先遍历左子树
@@ -279,24 +285,125 @@ public class Solutions4Traversal {
 //    }
 
 /** 在矩阵中某点可以斜着走，一共有8个方向，定义如下
-    int[][] dir = {
-        {0, 1},  // 右
-        {0, -1}, // 左
-        {1, 0},  // 下
-        {-1, 0}, // 上
-        {-1,-1}, // 左上
-        {-1,1},  // 右上
-        {1,-1},  // 左下
-        {1,1},   // 右下
-    };
-    for(int d = 0;d<8;d++) {
-        int nr = r + dir[d][0];
-        int nc = c + dir[d][1];
-        if (!(nr < 0 || nc < 0 || nr >= R || nc >= C)) {
-            // 处理点 (nr, nc)
-        }
-    }
-**/
+ int[][] dir = {
+ {0, 1},  // 右
+ {0, -1}, // 左
+ {1, 0},  // 下
+ {-1, 0}, // 上
+ {-1,-1}, // 左上
+ {-1,1},  // 右上
+ {1,-1},  // 左下
+ {1,1},   // 右下
+ };
+ for(int d = 0;d<8;d++) {
+ int nr = r + dir[d][0];
+ int nc = c + dir[d][1];
+ if (!(nr < 0 || nc < 0 || nr >= R || nc >= C)) {
+ // 处理点 (nr, nc)
+ }
+ }
+ **/
 
+    //********************************二叉树层序遍历***************************************//
+
+    /**
+     * https://leetcode-cn.com/problems/binary-tree-zigzag-level-order-traversal/
+     * 给你二叉树的根节点 root ，返回其节点值的锯齿形层序遍历。
+     * 即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行。
+     *
+     * @param root TreeNode
+     * @return 层序遍历结果列表
+     */
+    // 用 一个队列 + 一个栈 实现
+    public List<List<Integer>> zigzagLevelOrder1(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        boolean isLeftToRight = true;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            List<Integer> list = new ArrayList<>();
+            Stack<TreeNode> stack = new Stack<>();
+            for (int i = 0; i < size; i++) {
+                TreeNode node = queue.poll();
+                if (node != null) {
+                    if (isLeftToRight) {
+                        list.add(node.val);
+                    } else {
+                        stack.push(node);
+                    }
+                    if (node.left != null) {
+                        queue.offer(node.left);
+                    }
+                    if (node.right != null) {
+                        queue.offer(node.right);
+                    }
+                }
+            }
+            if (!isLeftToRight) {
+                while (!stack.isEmpty()) {
+                    TreeNode tree = stack.pop();
+                    list.add(tree.val);
+                }
+            }
+            result.add(list);
+            isLeftToRight = !isLeftToRight;
+        }
+        return result;
+    }
+
+    // 用两个栈实现
+    public List<List<Integer>> zigzagLevelOrder2(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        Stack<TreeNode> stack1 = new Stack<>();
+        Stack<TreeNode> stack2 = new Stack<>();
+        stack1.push(root);
+        TreeNode node;
+
+        while (true) {
+            ArrayList<Integer> temp1 = new ArrayList<>();
+            while (!stack1.isEmpty()) {
+                node = stack1.pop();
+                temp1.add(node.val);
+                if (node.left != null) {
+                    stack2.push(node.left);
+                }
+                if (node.right != null) {
+                    stack2.push(node.right);
+                }
+            }
+
+            if (!temp1.isEmpty()) {
+                result.add(temp1);
+            } else {
+                break;
+            }
+
+            ArrayList<Integer> temp2 = new ArrayList<>();
+            while (!stack2.isEmpty()) {
+                node = stack2.pop();
+                temp2.add(node.val);
+                if (node.right != null) {
+                    stack1.push(node.right);
+                }
+                if (node.left != null) {
+                    stack1.push(node.left);
+                }
+            }
+
+            if (!temp2.isEmpty()) {
+                result.add(temp2);
+            } else {
+                break;
+            }
+        }
+        return result;
+    }
 
 }
