@@ -1,8 +1,10 @@
 package com.pltech.study.java;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Description:
@@ -17,7 +19,9 @@ class Solutions {
         int[] heights = {2, 1, 5, 6, 2, 3};
         //int[] heights = {1, 1};
         Solutions solution = new Solutions();
-        int res = solution.trap3(heights);
+        //int res = solution.trap3(heights);
+        //solution.test1();
+        int res = solution.maxNumLowerThanN(324312, new int[]{2, 4, 8});
         System.out.println(res);
     }
 
@@ -282,11 +286,13 @@ class Solutions {
     ///**************************************************************************************///
 
     int[] memo;
+
     /**
-     *【零钱兑换】给定不同面额的硬币 coins 和一个总金额 amount。
+     * 【零钱兑换】给定不同面额的硬币 coins 和一个总金额 amount。
      * 编写一个函数来计算可以凑成总金额所需的最少的硬币个数。如果没有任何一种硬币组合能组成总金额，返回 -1。
-     * @param coins     可兑换的钱币
-     * @param amount    需兑换的钱数
+     *
+     * @param coins  可兑换的钱币
+     * @param amount 需兑换的钱数
      * @return 兑换方案数
      */
     public int coinChange(int[] coins, int amount) {
@@ -324,7 +330,7 @@ class Solutions {
     }
 
     /**
-     *【零钱兑换】给定不同面额的硬币 coins 和一个总金额 amount。
+     * 【零钱兑换】给定不同面额的硬币 coins 和一个总金额 amount。
      * 编写一个函数来计算可以凑成总金额所需的最少的硬币个数。如果没有任何一种硬币组合能组成总金额，返回 -1。
      */
     public int coinChange2(int[] coins, int amount) {
@@ -364,6 +370,7 @@ class Solutions {
         }
         return ans;
     }
+
     public int countSubstrings1(String s) {
         if (s == null) return 0;
         int n = s.length(), ans = 0;
@@ -400,4 +407,60 @@ class Solutions {
         }
         return ans;
     }
+
+
+    ///******************************************************************************************///
+    /**
+     * 给定一个数n如23121; 给定一组升序10以内的数字a如[2 4 9]，求由数组a中元素组成的小于n的最大数
+     */
+    int res = 0;
+    public int maxNumLowerThanN(int N, int[] nums) {
+        if (N <= 10) {
+            for (int n : nums) {
+                res = Math.max(res, n);
+            }
+            return res;
+        }
+        backtrack(0, 0, false, String.valueOf(N), nums);
+        return res;
+    }
+
+    /**
+     * 回溯算法，找到每一位的正确数字
+     * @param index         遍历给定的数值的位下标（从左到右 0...n）
+     * @param temp     当前确定的数，目标数据的前几位
+     * @param pass          是否要跳过当前位
+     * @param digits        待选的数字，要求是升序数组
+     */
+    private boolean backtrack(int index, int temp, boolean pass, String srcN, int[] digits) {
+        if (index == srcN.length()) {
+            res = temp;
+            return true;
+        }
+
+        int next = index + 1;
+        int length = digits.length;
+        if (!pass) {
+            int val = srcN.charAt(index) - '0';
+            //从digits数组中由大到小遍历
+            for (int i = length - 1; i >= 0; i--) {
+                int digit = digits[i];
+                if (val == digit) {
+                    if (backtrack(next, temp * 10 + digit, false, srcN, digits)) {
+                        return true;
+                    }
+                } else if (val > digit) {
+                    if (backtrack(next, temp * 10 + digit, true, srcN, digits)) {
+                        return true;
+                    }
+                }
+            }
+
+            if (index != 0) return false;
+            return backtrack(next, temp, true, srcN, digits);
+        } else {
+            return backtrack(next, temp * 10 + digits[length - 1], true, srcN, digits);
+        }
+    }
+
 }
